@@ -375,12 +375,21 @@ class _ProfileState extends State<Profile> {
                                 itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(9),
                                       child: Image.network(
-                                          snapshot.data!.docs[index]["imgPost"]
+                                        snapshot.data!.docs[index]["imgPost"],
+                                        loadingBuilder:
+                                            (context, child, progress) {
+                                          return progress == null
+                                              ? child
+                                              : Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                        },
+                                        fit: BoxFit.fill,
 
-                                          // "https://www.flypgs.com/blog/wp-content/uploads/2019/04/dogal-anit-1.jpg"
-                                          ));
+                                        // "https://www.flypgs.com/blog/wp-content/uploads/2019/04/dogal-anit-1.jpg"
+                                      ));
                                 }),
                           ),
                         );

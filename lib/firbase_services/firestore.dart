@@ -58,4 +58,70 @@ class FireStoreMethods {
     }
     showSnackBar(context, message);
   }
+
+
+
+
+
+  uploadComment({ required commentText, required postId, required profileImg, required username, required uid  })async{
+
+    if (commentText.isNotEmpty) {
+                              String commentId = const Uuid().v1();
+                            await FirebaseFirestore.instance
+                                .collection("postSSS")
+                                .doc(postId)
+                                .collection("commentSSS")
+                                .doc(commentId)
+                                .set({
+                              "profilePic": profileImg,
+                              "userName": username,
+                              "textComment": commentText,
+                              "datePublished": DateTime.now(),
+                              "uid": uid,
+                              "commentId": commentId,
+                            });
+
+                            }
+  }
+
+
+
+
+
+
+
+
+  toggleLikes({required Map postData}) async{
+
+    if (postData["likes"].contains(FirebaseAuth.instance.currentUser!.uid)) {
+                            await FirebaseFirestore.instance
+                              .collection("postSSS")
+                              .doc(postData["postId"])
+                              .update({
+                            "likes": FieldValue.arrayRemove(
+                                [FirebaseAuth.instance.currentUser!.uid])
+                          });
+                            
+                          } else {
+                            await FirebaseFirestore.instance
+                              .collection("postSSS")
+                              .doc(postData["postId"])
+                              .update({
+                            "likes": FieldValue.arrayUnion(
+                                [FirebaseAuth.instance.currentUser!.uid])
+                          });
+                          }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 }

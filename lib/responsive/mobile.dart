@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insta/screens/add_post.dart';
+import 'package:insta/screens/comments.dart';
 import 'package:insta/screens/favourt.dart';
 import 'package:insta/screens/home.dart';
 import 'package:insta/screens/profile.dart';
