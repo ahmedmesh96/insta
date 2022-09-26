@@ -15,7 +15,7 @@ class _SearchState extends State<Search> {
 
   // @override
   // void initState() {
-  //   // TODO: implement initState
+
   //   super.initState();
   //   myController.addListener(ddddd);
   // }
@@ -28,7 +28,7 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     myController.dispose();
     super.dispose();
   }
@@ -54,7 +54,7 @@ class _SearchState extends State<Search> {
             .get(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return const Text("Something went wrong");
           }
 
           if (snapshot.connectionState == ConnectionState.done) {

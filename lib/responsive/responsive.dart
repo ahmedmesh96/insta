@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:insta/responsive/mobile.dart';
+import 'package:insta/responsive/web.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/user_provider.dart';
 
 class Responsive extends StatefulWidget {
-  final myMobileScreen;
-  final myWebScreen;
+  final  MobileScreen myMobileScreen;
+  final WebScreen myWebScreen;
   const Responsive(
       {super.key, required this.myMobileScreen, required this.myWebScreen});
 
@@ -29,8 +31,8 @@ class _ResponsiveState extends State<Responsive> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext, BoxConstraints) {
-        if (BoxConstraints.maxWidth > 600) {
+      builder: (BuildContext   buildContext, BoxConstraints   boxConstraints) {
+        if (boxConstraints.maxWidth > 1024) {
           return widget.myWebScreen;
         } else {
           return widget.myMobileScreen;

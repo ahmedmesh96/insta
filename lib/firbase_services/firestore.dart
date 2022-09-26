@@ -1,4 +1,4 @@
-import 'dart:math';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -112,6 +112,59 @@ class FireStoreMethods {
                           });
                           }
   }
+
+
+  uploadTextPost(
+      {required imgName,
+      // required imgPath,
+      required textPost,
+      required profileImg,
+      required username,
+      required context}) async {
+    String message = "ERROR => Not starting the codeeee";
+    try {
+      //_________________________________________________________________________
+
+      // String urlll = await getImgURL(
+      //     imgName: imgName,
+      //     // imgPath: imgPath,
+      //     folderName: 'imgPosts/${FirebaseAuth.instance.currentUser!.uid}');
+
+      //_________________________________________________________________________
+
+      // firebase firestore (Database)
+      CollectionReference posts =
+          FirebaseFirestore.instance.collection('textPostSSS');
+
+      String newId = const Uuid().v1();
+
+      TextPostData postt = TextPostData(
+          datePublished: DateTime.now(),
+          textPost: textPost,
+          // imgPost: urlll,
+          likes: [],
+          postId: newId,
+          profileImg: profileImg,
+          uid: FirebaseAuth.instance.currentUser!.uid,
+          username: username,);
+
+      posts
+          .doc(newId)
+          .set(postt.convert2Map())
+          .then((value) => print("done...."))
+          .catchError((error) => print("Failed to post: $error"));
+
+      message = 'Posted successfully';
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, "ERROR : ${e.code} ");
+    } catch (e) {
+      print(e);
+    }
+    showSnackBar(context, message);
+  }
+
+
+  
 
 
 

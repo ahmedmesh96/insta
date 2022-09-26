@@ -2,9 +2,9 @@
 
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta/firbase_services/auth.dart';
@@ -12,7 +12,7 @@ import 'package:insta/responsive/responsive.dart';
 import 'package:insta/screens/sign_in.dart';
 import 'package:insta/shared/colors.dart';
 
-import 'dart:io';
+
 
 import 'package:path/path.dart' show basename;
 
@@ -41,6 +41,7 @@ class _RegisterState extends State<Register> {
   final usernameController = TextEditingController();
   final ageController = TextEditingController();
   final titleController = TextEditingController();
+  final nameController = TextEditingController();
 
   bool isPassword8Char = false;
   bool isPasswordHas1Number = false;
@@ -149,7 +150,8 @@ class _RegisterState extends State<Register> {
                             titleee: titleController.text,
                             usernameee: usernameController.text,
                             imgName: imgName,
-                            imgPath: imgPath,
+                            imgPath: imgPath, 
+                            nameee: nameController.text,
                           );
                           setState(() {
                             isLoading = false;
@@ -170,10 +172,10 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     emailController.dispose();
     passwordController.dispose();
-
+    nameController.dispose();
     usernameController.dispose();
     ageController.dispose();
     titleController.dispose();
@@ -248,6 +250,23 @@ class _RegisterState extends State<Register> {
                     const SizedBox(
                       height: 33,
                     ),
+
+                    TextFormField(
+                      validator: (value) {
+                        return value!.isEmpty? "Can Not be empty" : null;
+                      },
+                        controller: nameController,
+                        keyboardType: TextInputType.text,
+                        obscureText: false,
+                        decoration: decorationTextfield.copyWith(
+                            hintText: "Enter Your name : ",
+                            suffixIcon: Icon(Icons.person))),
+                    const SizedBox(
+                      height: 22,
+                    ),
+
+
+
                     TextFormField(
                       validator: (value) {
                         return value!.isEmpty? "Can Not be empty" : null;
@@ -360,7 +379,7 @@ class _RegisterState extends State<Register> {
                                     fontSize: 18,
                                     decoration: TextDecoration.underline))),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

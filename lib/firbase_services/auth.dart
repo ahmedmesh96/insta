@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:insta/firbase_services/storage.dart';
 import 'package:insta/models/user.dart';
 import 'package:insta/shared/snack_bar.dart';
@@ -12,6 +11,7 @@ class AuthMethods {
       required passworddd,
       required context,
       required titleee,
+      required nameee,
       required usernameee,
       required imgName,
       required imgPath,
@@ -49,6 +49,7 @@ class AuthMethods {
           email: emailll,
           password: passworddd,
           title: titleee,
+          name: nameee,
           username: usernameee,
           profileImg: urlll,
           uid: credential.user!.uid,
@@ -62,7 +63,8 @@ class AuthMethods {
           .doc(credential.user!.uid)
           .set(userr.convert2Map())
           .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+          .catchError((error) => 
+          print("Failed to add user: $error"));
 
           message = 'Registered & User Added 2 DB';
     } on FirebaseAuthException catch (e) {
@@ -77,7 +79,7 @@ class AuthMethods {
 
   signIn({required emailll, required passworddd, required context}) async {
     try {
-  final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+   await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: emailll,
     password: passworddd,
   );

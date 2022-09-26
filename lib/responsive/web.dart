@@ -6,6 +6,7 @@ import 'package:insta/shared/colors.dart';
 import '../screens/add_post.dart';
 import '../screens/favourt.dart';
 import '../screens/home.dart';
+import '../screens/main_home.dart';
 import '../screens/profile.dart';
 import '../screens/search.dart';
 
@@ -49,6 +50,7 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.home_outlined,
                 color: page==0? primaryColor : secondaryColor,
+                size: 40,
               )),
           IconButton(
               onPressed: () {
@@ -61,6 +63,8 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.search,
                 color: page==1? primaryColor : secondaryColor,
+                size: 40,
+
               )),
           IconButton(
               onPressed: () {
@@ -73,6 +77,8 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.add_circle_outline,
                 color: page==2? primaryColor : secondaryColor,
+                size: 40,
+
               )),
           IconButton(
               onPressed: () {
@@ -85,6 +91,8 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.favorite_outline,
                 color: page==3? primaryColor : secondaryColor,
+                size: 40,
+
               )),
           IconButton(
               onPressed: () {
@@ -97,13 +105,34 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.person_outline,
                 color: page==4? primaryColor : secondaryColor,
+                size: 40,
+
+              )),
+              
+          IconButton(onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+          }, icon: const Icon(Icons.logout_outlined, size: 40, color: Colors.red,)),
+
+          IconButton(
+              onPressed: () {
+                navigate2Screen(5);
+                setState(() {
+                  page = 5;
+                });
+
+              },
+              icon: Icon(
+                Icons.home_max,
+                color: page==3? primaryColor : secondaryColor,
+                size: 40,
+
               )),
         ],
         backgroundColor: mobileBackgroundColor,
         title: SvgPicture.asset(
           "assets/img/instagram.svg",
           color: primaryColor,
-          height: 32,
+          height: 44,
         ),
       ),
       body: PageView(
@@ -111,11 +140,13 @@ class _WebScreenState extends State<WebScreen> {
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         children:  [
-          Home(),
-          Search(),
-          AddPost(),
-          Favourt(),
+          MainHome(uiddd: FirebaseAuth.instance.currentUser!.uid,),
+          const Home(),
+          const Search(),
+          const AddPost(),
+          const Favourt(),
           Profile(uiddd: FirebaseAuth.instance.currentUser!.uid,),
+          MainHome(uiddd: FirebaseAuth.instance.currentUser!.uid,)
         ],
       ),
       

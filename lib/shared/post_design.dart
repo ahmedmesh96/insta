@@ -1,17 +1,11 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:insta/firbase_services/firestore.dart';
 import 'package:insta/screens/comments.dart';
 import 'package:intl/intl.dart';
-
 import 'colors.dart';
+import 'heart_animation.dart';
 
 class PostDesign extends StatefulWidget {
   final Map data;
@@ -24,6 +18,9 @@ class PostDesign extends StatefulWidget {
 class _PostDesignState extends State<PostDesign> {
   int commentCount = 0;
   bool showHeart = false;
+  bool isLikeAnimating = false;
+  bool isShowText = true;
+  
 
   getCommentCount() async {
     try {
@@ -57,13 +54,13 @@ class _PostDesignState extends State<PostDesign> {
                             .doc(widget.data["postId"])
                             .delete();
                       },
-                      padding: EdgeInsets.all(20),
-                      child: Text(
+                      padding: const EdgeInsets.all(20),
+                      child: const Text(
                         "Delete Post",
                         style: TextStyle(fontSize: 18),
                       ),
                     )
-                  : SimpleDialogOption(
+                  : const SimpleDialogOption(
                       padding: EdgeInsets.all(20),
                       child: Text(
                         "You can't Delete Post",
@@ -74,8 +71,8 @@ class _PostDesignState extends State<PostDesign> {
                 onPressed: () async {
                   Navigator.of(context).pop();
                 },
-                padding: EdgeInsets.all(20),
-                child: Text(
+                padding: const EdgeInsets.all(20),
+                child: const Text(
                   "Cancel",
                   style: TextStyle(fontSize: 18),
                 ),
@@ -87,7 +84,6 @@ class _PostDesignState extends State<PostDesign> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCommentCount();
   }
@@ -95,6 +91,7 @@ class _PostDesignState extends State<PostDesign> {
   @override
   Widget build(BuildContext context) {
     final double widthScreen = MediaQuery.of(context).size.width;
+    
 
     return Container(
       ///////
@@ -103,7 +100,9 @@ class _PostDesignState extends State<PostDesign> {
           borderRadius: BorderRadius.circular(12)),
 
       margin: widthScreen > 600
-          ? EdgeInsets.symmetric(vertical: 55, horizontal: widthScreen / 6)
+          ? const EdgeInsets.symmetric(
+              // vertical: 55, horizontal: widthScreen / 6
+              )
           : null,
       child: Column(
         children: [
@@ -121,7 +120,9 @@ class _PostDesignState extends State<PostDesign> {
                           shape: BoxShape.circle,
                           color: Color.fromARGB(125, 78, 91, 110)),
                       child: CircleAvatar(
-                        radius: 33,
+                        radius: widthScreen > 600
+                            ? widthScreen * 0.06
+                            : widthScreen * 0.07,
                         backgroundImage:
                             NetworkImage(widget.data["profileImg"]),
                       ),
@@ -129,33 +130,86 @@ class _PostDesignState extends State<PostDesign> {
                     const SizedBox(
                       width: 17,
                     ),
-                    Text(
-                      widget.data["username"],
-                      style: TextStyle(fontSize: 15),
+                    SizedBox(
+                      width: widthScreen > 600
+                          ? widthScreen * 0.1
+                          : widthScreen * 0.12,
+                      child: FittedBox(
+                        child: Text(
+                          widget.data["username"],
+                          // style: const TextStyle(fontSize: 15),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                IconButton(
-                    onPressed: () {
-                      showmodel();
-                    },
-                    icon: const Icon(Icons.more_vert))
+                SizedBox(
+                  width: widthScreen > 600
+                      ? widthScreen * 0.08
+                      : widthScreen * 0.12,
+                  child: FittedBox(
+                    child: IconButton(
+                        onPressed: () {
+                          showmodel();
+                        },
+                        icon: const Icon(Icons.more_vert)),
+                  ),
+                )
               ],
+            ),
+          ),
+
+          widthScreen > 600 ? 
+          InkWell(
+            onTap: () {
+              setState(() {
+                isShowText = ! isShowText;
+              });
+            },
+            child: Container(
+              width: widthScreen,
+              margin: EdgeInsets.all(widthScreen > 600? widthScreen * 0.01 : widthScreen* 0.02),
+              child: Text(
+                
+                widget.data["description"],
+                overflow: TextOverflow.ellipsis,
+                maxLines: isShowText? null: 10,
+                
+                
+                
+                style: const TextStyle( color: Colors.white, fontWeight: FontWeight.w200, fontSize: 35), 
+              ),
+            ),
+          )
+          :
+          InkWell(
+            onTap: () {
+              setState(() {
+                isShowText = !isShowText;
+              });
+            },
+            child: Container(
+              width: widthScreen,
+              margin: EdgeInsets.all(widthScreen > 600? widthScreen * 0.01 : widthScreen* 0.02),
+              child: Text(
+                
+                widget.data["description"],
+                overflow: TextOverflow.ellipsis,
+                maxLines: isShowText ? null : 10,
+                
+                
+                
+                style: const TextStyle( color: Colors.white, fontWeight: FontWeight.w200, fontSize: 20), 
+              ),
             ),
           ),
           GestureDetector(
             onDoubleTap: () async {
               setState(() {
-                showHeart = true;
+                isLikeAnimating = true;
               });
 
               // after 3 secound remove heart
-              Timer(Duration(seconds: 1), () {
-                setState(() {
-                showHeart = false;
-                  
-                });
-              });
 
               try {
                 await FireStoreMethods().toggleLikes(postData: widget.data);
@@ -163,6 +217,7 @@ class _PostDesignState extends State<PostDesign> {
                 print(e.toString());
               }
             },
+            
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -178,24 +233,33 @@ class _PostDesignState extends State<PostDesign> {
                           ? child
                           : SizedBox(
                               height: MediaQuery.of(context).size.height * 0.50,
-                              child:
-                                  Center(child: CircularProgressIndicator()));
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
                     },
                   ),
                 ),
-                showHeart
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.white,
-                        size: 200,
-                      )
-                    : 
-                    SizedBox(height: 1,),
-                    // Icon(
-                    //     Icons.favorite,
-                    //     color: Colors.red,
-                    //     size: 200,
-                    //   )
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: isLikeAnimating ? 1 : 0,
+                  child: LikeAnimation(
+                    isAnimating: isLikeAnimating,
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ),
+                    onEnd: () {
+                      setState(() {
+                        isLikeAnimating = false;
+                      });
+                    },
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 111,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -204,75 +268,117 @@ class _PostDesignState extends State<PostDesign> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () async {
-                          // dddddddddddd
-
-                          try {
-                            await FireStoreMethods()
-                                .toggleLikes(postData: widget.data);
-                          } catch (e) {
-                            print(e.toString());
-                          }
-                        },
-                        icon: widget.data["likes"].contains(
-                                FirebaseAuth.instance.currentUser!.uid)
-                            ? const Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              )
-                            : const Icon(
-                                Icons.favorite_border,
-                              )),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CommentsScreen(
-                                  data: widget.data,
-                                  showTextField: true,
-                                ),
-                              ));
-                        },
-                        icon: const Icon(Icons.comment_outlined)),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.send)),
-                  ],
+                SizedBox(
+                  width: widthScreen * 0.3,
+                  child: FittedBox(
+                    child: Row(
+                      children: [
+                        LikeAnimation(
+                          isAnimating: widget.data['likes']
+                              .contains(FirebaseAuth.instance.currentUser!.uid),
+                          smallLike: true,
+                          child: IconButton(
+                            onPressed: () async {
+                              try {
+                                await FireStoreMethods()
+                                    .toggleLikes(postData: widget.data);
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                            },
+                            icon: widget.data['likes'].contains(
+                                    FirebaseAuth.instance.currentUser!.uid)
+                                ? const Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )
+                                : const Icon(
+                                    Icons.favorite_border,
+                                  ),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CommentsScreen(
+                                      data: widget.data,
+                                      showTextField: true,
+                                    ),
+                                  ));
+                            },
+                            icon: const Icon(Icons.comment_outlined)),
+                        IconButton(
+                            onPressed: () {}, icon: const Icon(Icons.send)),
+                      ],
+                    ),
+                  ),
                 ),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.bookmark_outline)),
+                SizedBox(
+                  width: widthScreen * 0.1,
+                  child: FittedBox(
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.bookmark_outline)),
+                  ),
+                ),
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-            width: double.infinity,
-            child: Text(
-              " ${widget.data["likes"].length}  ${widget.data["likes"].length > 1 ? "Likes" : "Like"} ",
-              style: TextStyle(
-                  fontSize: 18, color: Color.fromARGB(137, 255, 255, 255)),
-            ),
+          Stack(
+            children: [
+              Container(),
+              Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                // width: double.infinity,
+                width:
+                    widthScreen > 600 ? widthScreen * 0.09 : widthScreen * 0.13,
+
+                child: FittedBox(
+                  child: Text(
+                    " ${widget.data["likes"].length}  ${widget.data["likes"].length > 1 ? "Likes" : "Like"} ",
+                    style: const TextStyle(
+                        fontSize: 18,
+                        color: Color.fromARGB(137, 255, 255, 255)),
+                  ),
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 9,
               ),
-              Text(
-                widget.data["username"],
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
               SizedBox(
+                width:
+                    widthScreen > 600 ? widthScreen * 0.09 : widthScreen * 0.11,
+                child: FittedBox(
+                  child: Text(
+                    widget.data["username"],
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(
                 width: 12,
               ),
-              Text(
-                widget.data["description"],
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )
+              SizedBox(
+                width:
+                    widthScreen > 600 ? widthScreen * 0.06 : widthScreen * 0.08,
+                child: FittedBox(
+                  child: Text(
+                    widget.data["description"],
+                    textAlign: TextAlign.start,
+                    style: const TextStyle( color: Colors.white, fontWeight: FontWeight.w200),
+                  ),
+                ),
+              ),
             ],
           ),
           InkWell(
@@ -286,26 +392,52 @@ class _PostDesignState extends State<PostDesign> {
                     ),
                   ));
             },
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(10, 9, 9, 10),
-              width: double.infinity,
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Container(
+                  
+                  width: double.infinity,
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 9, 9, 10),
+
+                  width: widthScreen > 600
+                      ? widthScreen * 0.23
+                      : widthScreen * 0.333,
+                  child: FittedBox(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "view all ${commentCount} comments",
+                      style: const TextStyle(
+                          color: Color.fromARGB(137, 255, 255, 255)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Stack(
+            children: [
+              Container(),
+              Container(
+            margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+            width: widthScreen > 600
+                      ? widthScreen * 0.23
+                      : widthScreen * 0.333,
+            child: FittedBox(
               child: Text(
-                "view all ${commentCount} comments",
-                style: TextStyle(
+                DateFormat("MMMM d," "y")
+                    .format(widget.data["datePublished"].toDate()),
+                style: const TextStyle(
                     fontSize: 16, color: Color.fromARGB(137, 255, 255, 255)),
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 9, 10),
-            width: double.infinity,
-            child: Text(
-              DateFormat("MMMM d," "y")
-                  .format(widget.data["datePublished"].toDate()),
-              style: TextStyle(
-                  fontSize: 16, color: Color.fromARGB(137, 255, 255, 255)),
-            ),
+
+            ],
           ),
+          
         ],
       ),
     );

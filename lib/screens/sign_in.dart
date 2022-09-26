@@ -9,6 +9,7 @@ import 'package:insta/shared/colors.dart';
 
 import '../shared/contants.dart';
 import '../shared/snack_bar.dart';
+import 'forgot_passowrd.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -149,9 +150,14 @@ class _LoginState extends State<Login> {
                                     decoration: TextDecoration.underline))),
                       ],
                     ),
-                    SizedBox(
-                      height: 17,
-                    ),
+                    
+                    TextButton(onPressed: (){
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ForgotPassword()),
+                          );
+                    }, child: Text("forget password?", style: TextStyle(color: Colors.white, decoration: TextDecoration.underline ),)),
+
                     SizedBox(
                       width: 299,
                       child: Row(
@@ -193,6 +199,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
+                    
                   ]),
             ),
           )),

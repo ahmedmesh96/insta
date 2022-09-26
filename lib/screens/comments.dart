@@ -5,14 +5,14 @@ import 'package:insta/shared/colors.dart';
 import 'package:insta/shared/contants.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
+
 
 import '../provider/user_provider.dart';
 
 class CommentsScreen extends StatefulWidget {
   final Map data;
-  bool showTextField = true;
-   CommentsScreen({super.key, required this.data, required this.showTextField});
+  final bool showTextField;
+  const CommentsScreen({super.key, required this.data, required this.showTextField});
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
@@ -49,11 +49,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
-                return Text('Something went wrong');
+                return const Text('Something went wrong');
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(
+                return const CircularProgressIndicator(
                   color: Colors.white,
                 );
               }
@@ -65,14 +65,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
                     return Container(
-                      margin: EdgeInsets.only(bottom: 14),
+                      margin: const  EdgeInsets.only(bottom: 14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(right: 12),
+                                margin: const  EdgeInsets.only(right: 12),
                                 padding: const EdgeInsets.all(3),
                                 decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
@@ -99,18 +99,18 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 17),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 11,
                                       ),
                                       Text(
                                         data["textComment"]
                                         // "nice pic"
                                         ,
-                                        style: TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 16),
                                       )
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                   Text(
@@ -120,7 +120,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                     // "12/12/2012"
 
                                     ,
-                                    style: TextStyle(
+                                    style: const  TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
                                   )
@@ -129,7 +129,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             ],
                           ),
                           IconButton(
-                              onPressed: () {}, icon: Icon(Icons.favorite))
+                              onPressed: () {}, icon: const  Icon(Icons.favorite))
                         ],
                       ),
                     );
@@ -143,11 +143,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
           widget.showTextField  ?
           Container(
-            margin: EdgeInsets.only(bottom: 12),
+            margin: const  EdgeInsets.only(bottom: 12),
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 12),
+                  margin: const EdgeInsets.only(right: 12),
                   padding: const EdgeInsets.all(3),
                   decoration: const BoxDecoration(
                       shape: BoxShape.circle,
@@ -182,7 +182,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
               ],
             ),
           )
-       : SizedBox(height: 10,)
+       : const SizedBox(height: 10,)
        
        
        

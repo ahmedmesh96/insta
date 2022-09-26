@@ -5,13 +5,11 @@ import 'package:insta/provider/user_provider.dart';
 import 'package:insta/responsive/mobile.dart';
 import 'package:insta/responsive/responsive.dart';
 import 'package:insta/responsive/web.dart';
-import 'package:insta/screens/register.dart';
+
 import 'package:insta/screens/sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:insta/screens/verify_email.dart';
+
 import 'package:insta/shared/snack_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +54,9 @@ class MyApp extends StatelessWidget {
             } else if (snapshot.hasError) {
               return showSnackBar(context, "Something went wrong");
             } else if (snapshot.hasData) {
-              return const Responsive(
+              return const 
+              // VerifyEmailPage();
+              Responsive(
                 myMobileScreen: MobileScreen(),
                 myWebScreen: WebScreen(),
               );

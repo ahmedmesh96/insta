@@ -59,7 +59,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -69,7 +68,7 @@ class _ProfileState extends State<Profile> {
     final double widthScreen = MediaQuery.of(context).size.width;
 
     return isLoading
-        ? Scaffold(
+        ? const Scaffold(
             backgroundColor: mobileBackgroundColor,
             body: Center(
                 child: CircularProgressIndicator(
@@ -78,7 +77,7 @@ class _ProfileState extends State<Profile> {
           )
         : Scaffold(
             backgroundColor:
-                widthScreen > 600 ? webBackgroundColor : mobileBackgroundColor,
+                widthScreen > 1024 ? webBackgroundColor : mobileBackgroundColor,
             appBar: AppBar(
                 backgroundColor: mobileBackgroundColor,
                 centerTitle: false,
@@ -87,7 +86,7 @@ class _ProfileState extends State<Profile> {
               decoration: BoxDecoration(
                   color: mobileBackgroundColor,
                   borderRadius: BorderRadius.circular(12)),
-              margin: widthScreen > 600
+              margin: widthScreen > 1024
                   ? EdgeInsets.symmetric(
                       vertical: 0, horizontal: widthScreen / 6)
                   : null,
@@ -96,13 +95,13 @@ class _ProfileState extends State<Profile> {
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(left: 10),
                         padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color.fromARGB(125, 78, 91, 110)),
                         child: CircleAvatar(
-                          radius: 40,
+                          radius: widthScreen * 0.08,
                           backgroundImage: NetworkImage(userData["profileImg"]),
                           // "https://www.indiewire.com/wp-content/uploads/2022/01/AP21190389554952-e1643225561835.jpg"),
                         ),
@@ -115,14 +114,14 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Text(
                                   postCount.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
+                                const Text(
                                   "Posts",
                                   style: TextStyle(
                                       fontSize: 15,
@@ -131,21 +130,21 @@ class _ProfileState extends State<Profile> {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 17,
                             ),
                             Column(
                               children: [
                                 Text(
                                   followers.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
+                                const Text(
                                   "Followers",
                                   style: TextStyle(
                                       fontSize: 15,
@@ -154,21 +153,21 @@ class _ProfileState extends State<Profile> {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 17,
                             ),
                             Column(
                               children: [
                                 Text(
                                   following.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
+                                const Text(
                                   "Following",
                                   style: TextStyle(
                                       fontSize: 15,
@@ -184,18 +183,18 @@ class _ProfileState extends State<Profile> {
                   ),
                   Container(
                       width: double.infinity,
-                      // padding: EdgeInsets.only(left: 10),
+                      
                       margin: const EdgeInsets.fromLTRB(33, 21, 0, 0),
                       child: Text(userData["title"])),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Divider(
                     color: Colors.white,
                     thickness: widthScreen > 600 ? 0.05 : 0.44,
                   ),
-                  SizedBox(
-                    height: 9,
+                  const SizedBox(
+                    height: 9.0,
                   ),
 
                   // ________________________+_____
@@ -206,18 +205,18 @@ class _ProfileState extends State<Profile> {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit,
                                 size: 24,
                                 color: Colors.grey,
                               ),
-                              label: Text(
+                              label: const Text(
                                 "Edit profile",
                                 style: TextStyle(fontSize: 17),
                               ),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                  Color.fromARGB(0, 90, 103, 223),
+                                  const Color.fromARGB(0, 90, 103, 223),
                                 ),
                                 padding: MaterialStateProperty.all(
                                     EdgeInsets.symmetric(
@@ -226,7 +225,7 @@ class _ProfileState extends State<Profile> {
                                 shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(7),
-                                    side: BorderSide(
+                                    side: const BorderSide(
                                         color:
                                             Color.fromARGB(109, 255, 255, 255),
                                         style: BorderStyle.solid),
@@ -236,17 +235,17 @@ class _ProfileState extends State<Profile> {
                             ),
                             ElevatedButton.icon(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.logout,
                                 size: 24.0,
                               ),
-                              label: Text(
+                              label: const Text(
                                 "Log out",
                                 style: TextStyle(fontSize: 17),
                               ),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                  Color.fromARGB(143, 255, 55, 112),
+                                  const Color.fromARGB(143, 255, 55, 112),
                                 ),
                                 padding: MaterialStateProperty.all(
                                     EdgeInsets.symmetric(
@@ -288,9 +287,9 @@ class _ProfileState extends State<Profile> {
                               },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color.fromARGB(143, 255, 55, 112)),
+                                      const Color.fromARGB(143, 255, 55, 112)),
                                   padding: MaterialStateProperty.all(
-                                    EdgeInsets.symmetric(
+                                    const EdgeInsets.symmetric(
                                         vertical: 9, horizontal: 66),
                                   ),
                                   shape: MaterialStateProperty.all(
@@ -329,7 +328,7 @@ class _ProfileState extends State<Profile> {
                               },
                               style: ButtonStyle(
                                   padding: MaterialStateProperty.all(
-                                    EdgeInsets.symmetric(
+                                    const EdgeInsets.symmetric(
                                         vertical: 9, horizontal: 77),
                                   ),
                                   shape: MaterialStateProperty.all(
@@ -341,14 +340,14 @@ class _ProfileState extends State<Profile> {
                                 style: TextStyle(fontSize: 17),
                               )),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 9,
                   ),
                   Divider(
                     color: Colors.white,
                     thickness: widthScreen > 600 ? 0.05 : 0.44,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   FutureBuilder(
@@ -358,7 +357,7 @@ class _ProfileState extends State<Profile> {
                         .get(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        return Text("Something went wrong");
+                        return const Text("Something went wrong");
                       }
 
                       if (snapshot.connectionState == ConnectionState.done) {
@@ -367,7 +366,7 @@ class _ProfileState extends State<Profile> {
                             padding: const EdgeInsets.all(3.0),
                             child: GridView.builder(
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
                                         childAspectRatio: 3 / 2,
                                         crossAxisSpacing: 10,
@@ -382,7 +381,7 @@ class _ProfileState extends State<Profile> {
                                             (context, child, progress) {
                                           return progress == null
                                               ? child
-                                              : Center(
+                                              : const Center(
                                                   child:
                                                       CircularProgressIndicator());
                                         },
@@ -395,7 +394,7 @@ class _ProfileState extends State<Profile> {
                         );
                       }
 
-                      return Center(
+                      return const Center(
                           child: CircularProgressIndicator(
                         color: Colors.white,
                       ));

@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
 
 class UserData {
   String password;
   String email;
   String title;
   String username;
+  String name;
   String profileImg;
   String uid;
   List followers;
@@ -19,7 +20,8 @@ class UserData {
     required this.profileImg,
     required this.uid,
     required this.followers,
-    required this.following,
+    required this.following, 
+    required this.name,
   });
 
 // To convert the UserData(Data type) to Map<String, object>
@@ -29,6 +31,7 @@ class UserData {
       "email": email,
       "title": title,
       "username": username,
+      "name": name,
       "profileImg": profileImg,
       "uid": uid,
       "followers": [],
@@ -47,6 +50,7 @@ class UserData {
   password: snapshot["password"],
   email: snapshot["email"],
   title: snapshot["title"],
+  name:snapshot["name"],
   username: snapshot["username"],
   profileImg: snapshot["profileImg"],
   uid: snapshot["uid"],

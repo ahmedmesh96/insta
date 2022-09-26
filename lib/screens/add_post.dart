@@ -4,12 +4,19 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta/firbase_services/firestore.dart';
+import 'package:insta/responsive/mobile.dart';
+import 'package:insta/responsive/responsive.dart';
+import 'package:insta/responsive/web.dart';
+import 'package:insta/screens/home.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/user_provider.dart';
 import '../shared/colors.dart';
 
 import 'package:path/path.dart' show basename;
+
+import '../shared/snack_bar.dart';
+import 'add_post_text.dart';
 
 class AddPost extends StatefulWidget {
   const AddPost({super.key});
@@ -27,6 +34,16 @@ class _AddPostState extends State<AddPost> {
   Uint8List? imgPath;
   String? imgName;
 
+
+  uploadText2Screen()async{
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AddPostText(),));
+    
+
+
+
+  }
+
   uploadImage2Screen(ImageSource source) async {
     Navigator.pop(context);
 
@@ -43,6 +60,7 @@ class _AddPostState extends State<AddPost> {
         });
       } else {
         print("NO img selected");
+        // showSnackBar(context,"Error => $e");
       }
     } catch (e) {
       print("Error => $e");
@@ -76,65 +94,27 @@ class _AddPostState extends State<AddPost> {
                 "From Gallery",
                 style: TextStyle(fontSize: 18),
               ),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                // Navigator.of(context).pop();
+                await uploadText2Screen();
+              },
+              padding: const EdgeInsets.all(20),
+              child: const Text(
+                "Post Text",
+                style: TextStyle(fontSize: 18),
+              ),
             )
           ],
         );
 
-        // Container(
-        //   padding: EdgeInsets.all(22),
-        //   height: 170,
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       GestureDetector(
-        //         onTap: () async {
-        //           await uploadImage2Screen(ImageSource.camera);
-        //         },
-        //         child: Row(
-        //           children: [
-        //             Icon(
-        //               Icons.camera,
-        //               size: 30,
-        //             ),
-        //             SizedBox(
-        //               width: 11,
-        //             ),
-        //             Text(
-        //               "From Camera",
-        //               style: TextStyle(fontSize: 20),
-        //             )
-        //           ],
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         height: 22,
-        //       ),
-        //       GestureDetector(
-        //         onTap: () {
-        //           uploadImage2Screen(ImageSource.gallery);
-        //         },
-        //         child: Row(
-        //           children: [
-        //             Icon(
-        //               Icons.photo_outlined,
-        //               size: 30,
-        //             ),
-        //             SizedBox(
-        //               width: 11,
-        //             ),
-        //             Text(
-        //               "From Gallery",
-        //               style: TextStyle(fontSize: 20),
-        //             )
-        //           ],
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // );
+        
       },
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,8 +156,12 @@ class _AddPostState extends State<AddPost> {
                         isLoading = false;
                         imgPath = null;
                       });
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Responsive(myMobileScreen: MobileScreen(), myWebScreen: WebScreen(),),));
+                      setState(() {
+                        decController.clear();
+                      });
                     },
-                    child: Text(
+                    child: const Text(
                       "Post",
                       style: TextStyle(
                           color: Colors.blueAccent,
@@ -198,17 +182,17 @@ class _AddPostState extends State<AddPost> {
             body: Column(
               children: [
                 isLoading
-                    ? LinearProgressIndicator()
-                    : Divider(
+                    ? const LinearProgressIndicator()
+                    : const Divider(
                         thickness: 1,
-                        height: 30,
+                        height: 30.0,
                       ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 10),
+                      margin: const  EdgeInsets.only(left: 10.0),
                       padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle,
@@ -225,7 +209,7 @@ class _AddPostState extends State<AddPost> {
                       child: TextField(
                         controller: decController,
                         maxLines: 8,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             hintText: "write a caption...",
                             border: InputBorder.none),
                       ),

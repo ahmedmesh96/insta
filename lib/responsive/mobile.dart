@@ -2,13 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insta/screens/add_post.dart';
-import 'package:insta/screens/comments.dart';
+
 import 'package:insta/screens/favourt.dart';
 import 'package:insta/screens/home.dart';
 import 'package:insta/screens/profile.dart';
 import 'package:insta/screens/search.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
+
+import '../screens/add_post_text.dart';
+import '../screens/forgot_passowrd.dart';
+import '../screens/main_home.dart';
+import '../screens/verify_email.dart';
 import '../shared/colors.dart';
 
 class MobileScreen extends StatefulWidget {
@@ -68,17 +72,25 @@ class _MobileScreenState extends State<MobileScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline,
                 color: currentPage == 4 ? primaryColor : secondaryColor,), label: ""),
+                BottomNavigationBarItem(
+                icon: Icon(Icons.home_max,
+                color: currentPage == 5 ? primaryColor : secondaryColor,), label: ""),
           ]),
       body: PageView(
         onPageChanged: (index) {},
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         children:  [
-          Home(),
-          Search(),
-          AddPost(),
-          Favourt(),
+          // ForgotPassword(),
+          // VerifyEmailPage(),
+          AddPostText(),
+          MainHome(uiddd: FirebaseAuth.instance.currentUser!.uid,),
+          const Home(),
+          const Search(),
+          const AddPost(),
+          const Favourt(),
           Profile(uiddd: FirebaseAuth.instance.currentUser!.uid,),
+          
         ],
       ),
     );

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../shared/colors.dart';
-import 'package:intl/intl.dart';
+
 
 import '../shared/post_design.dart';
 
@@ -21,32 +21,50 @@ class _HomeState extends State<Home> {
     final double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: widthScreen> 600 ? webBackgroundColor :  mobileBackgroundColor,
-      appBar: widthScreen > 600 ? null 
+      appBar: widthScreen > 1024 ? null 
       :AppBar(
         backgroundColor: mobileBackgroundColor,
         centerTitle: false,
         title: SvgPicture.asset(
           "assets/img/instagram.svg",
           color: primaryColor,
-          height: 32,
+          height: widthScreen > 600 ? widthScreen * 0.05 :32,
         ),
         actions: [
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.messenger_outline)),
-          IconButton(onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-          }, icon: const Icon(Icons.logout_outlined)),
+          SizedBox(
+            
+            
+            width: widthScreen * 0.22,
+            child: FittedBox(
+              alignment: Alignment.centerRight,
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+            
+                IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.messenger_outline, )),
+              IconButton(onPressed: () async {
+                setState(() async{
+                  await FirebaseAuth.instance.signOut();
+                });
+              }, icon: const Icon(Icons.logout_outlined, color: Colors.red, )),
+            
+              ],),
+            ),
+          ),
+          
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('postSSS').snapshots(),
+      stream: FirebaseFirestore.instance.collection('postSSS').orderBy("datePublished", descending: true).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: Colors.white,));
+          return const Center(child: CircularProgressIndicator(color: Colors.white,));
         }
 
         return ListView(
